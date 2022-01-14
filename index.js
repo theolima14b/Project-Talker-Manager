@@ -1,6 +1,11 @@
 const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
+// const {
+//   nameValidator,
+//   ageValidator,
+//   tokenValidator,
+// } = require('./validators/talkerValidator');
 
 const app = express();
 app.use(bodyParser.json());
@@ -56,9 +61,20 @@ app.post('/login', (req, res) => {
     return res
       .status(400)
       .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
-  }
+    }
   return res.status(HTTP_OK_STATUS).json({ token: '7mqaVRXJSp886CGr' });
 });
+
+// REQUISITO 4:
+
+// app.post('/talker',
+//   nameValidator, 
+//   ageValidator,
+//   tokenValidator,
+//   (req, res) => {
+//   const { name, age, talk: { watchedAt, rate } } = req.body;
+//   return res.status(201).json({ name, age, talk: { watchedAt, rate } });
+// });
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
