@@ -69,17 +69,18 @@ app.post('/talker',
 tokenValidator, nameValidator, ageValidator, 
 talkValidator, rateValidator, watchedValidator,
 (req, res) => {
+  const readTalkerFile = JSON.parse(fs.readFileSync('./talker.json', 'utf-8'));
   const { name, age, talk: { watchedAt, rate } } = req.body;
-  const readTalkerFile = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
   const newTalker = {
     name: `${name}`,
     age,
     id: readTalkerFile.length + 1,
     talk: { rate, watchedAt: `${watchedAt}` },
   };
-  readTalkerFile.push(JSON.stringify(newTalker));
+  readTalkerFile.push(newTalker);
   console.log(newTalker);
-  return res.status(201).json(JSON.stringify(newTalker));
+  fs.writeFileSync('./talker.json', JSON.stringify(readTalkerFile));
+  return res.status(201).json(newTalker);
 });
 
 // não remova esse endpoint, e para o avaliador funcionar
