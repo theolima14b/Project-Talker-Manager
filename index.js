@@ -14,8 +14,6 @@ const { newToken } = require('./middlewares/generateToken');
 const app = express();
 app.use(bodyParser.json());
 
-const readTalkerFile = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
-
 const RegExp = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/; //  Gustavo Sant'Anna da turma 14B que ajudou a fazer o regex pra validar o email
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
@@ -23,7 +21,7 @@ const PORT = '3000';
 // REQUISITO 1:
 
 app.get('/talker', (_request, response) => {
-  response.status(HTTP_OK_STATUS).json(readTalkerFile);
+  response.status(HTTP_OK_STATUS).json(JSON.parse(fs.readFileSync('./talker.json', 'utf8')));
 });
 
 // REQUISITO 2:
@@ -31,7 +29,7 @@ app.get('/talker', (_request, response) => {
 app.get('/talker/:talkerId', (req, res) => {
   const { talkerId } = req.params;
 
-  const getTalkerById = readTalkerFile.find(
+  const getTalkerById = JSON.parse(fs.readFileSync('./talker.json', 'utf8')).find(
     (talker) => talker.id === Number(talkerId),
   );
 
@@ -72,15 +70,7 @@ tokenValidator, nameValidator, ageValidator,
 talkValidator, rateValidator, watchedValidator,
 (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
-  const newTalker = {
-    name: `${name}`,
-    age,
-    id: readTalkerFile.length + 1,
-    talk: { rate, watchedAt: `${watchedAt}` },
-  };
-  readTalkerFile.push(newTalker);
-  fs.writeFileSync('./talker.json', JSON.stringify(readTalkerFile));
-  return res.status(201).json(newTalker);
+  return res.status(201).json({ name, age, talk: { watchedAt, rate } });
 });
 
 // não remova esse endpoint, e para o avaliador funcionar
