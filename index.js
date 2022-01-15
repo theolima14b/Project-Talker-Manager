@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 const RegExp = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/; //  Gustavo Sant'Anna da turma 14B que ajudou a fazer o regex pra validar o email
 const HTTP_OK_STATUS = 200;
-const PORT = '3000';
+const PORT = '3000'; 
 
 // REQUISITO 1:
 
