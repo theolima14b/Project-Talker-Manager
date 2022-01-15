@@ -70,7 +70,16 @@ tokenValidator, nameValidator, ageValidator,
 talkValidator, rateValidator, watchedValidator,
 (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
-  return res.status(201).json({ name, age, talk: { watchedAt, rate } });
+  const readTalkerFile = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
+  const newTalker = {
+    name: `${name}`,
+    age,
+    id: readTalkerFile.length + 1,
+    talk: { rate, watchedAt: `${watchedAt}` },
+  };
+  readTalkerFile.push(JSON.stringify(newTalker));
+  console.log(newTalker);
+  return res.status(201).json(JSON.stringify(newTalker));
 });
 
 // não remova esse endpoint, e para o avaliador funcionar
