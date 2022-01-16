@@ -19,10 +19,26 @@ const HTTP_OK_STATUS = 200;
 const TALKER_FILE = './talker.json';
 const PORT = '3000'; 
 
+// REQUISITO 7:
+
+app.get('/talker/search', tokenValidator, (req, res) => {
+  const { searchTerm } = req.query;
+  const readTalkerFile = JSON.parse(fs.readFileSync(TALKER_FILE, 'utf-8')); 
+  if (!searchTerm || searchTerm === '') return res.status(HTTP_OK_STATUS).json(readTalkerFile);
+
+  const filteredTalkers = readTalkerFile.filters(({ name }) => name.includes(searchTerm));
+
+  if (!filteredTalkers) return res.status(HTTP_OK_STATUS).json([]);
+
+  res.status(HTTP_OK_STATUS).json(filteredTalkers);
+});
+
 // REQUISITO 1:
 
-app.get('/talker', (_request, response) => {
-  response.status(HTTP_OK_STATUS).json(JSON.parse(fs.readFileSync(TALKER_FILE, 'utf8')));
+app.get('/talker', (_request, res) => {
+  const readTalkerFile = JSON.parse(fs.readFileSync(TALKER_FILE, 'utf-8'));
+
+  res.status(HTTP_OK_STATUS).json(readTalkerFile);
 });
 
 // REQUISITO 2:
