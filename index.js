@@ -99,6 +99,19 @@ talkValidator, rateValidator, watchedValidator,
   return res.status(HTTP_OK_STATUS).send(editedTalker);
 });
 
+// REQUISITO 6:
+
+app.delete('/talker/:talkerId', tokenValidator, (req, res) => {
+  const { talkerId } = req.params;
+  const readTalkerFile = JSON.parse(fs.readFileSync(TALKER_FILE, 'utf-8'));
+
+  readTalkerFile.splice(Number(talkerId) - 1, 1);
+
+  fs.writeFileSync('./talker.json', JSON.stringify(readTalkerFile));
+
+  return res.status(204).end();
+});
+
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
