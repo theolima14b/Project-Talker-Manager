@@ -11,7 +11,7 @@ const tokenValidator = (req, res, next) => {
     return res.status(401).json({ message: 'Token inválido' });
   }
 
-  return next();
+  next();
 };
 
 const nameValidator = (req, res, next) => {
